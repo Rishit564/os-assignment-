@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scheduling Algorithms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Scheduling Algorithms</h1>
+        
+        <h2>First In First Out (FIFO)</h2>
+        <div class="input-group">
+            <label for="fifoBurstTimes">Enter Burst Times (comma-separated):</label>
+            <input type="text" id="fifoBurstTimes" placeholder="e.g., 5,8,2,6">
+        </div>
+        <button class="btn" onclick="calculateFIFO()">Calculate FIFO</button>
+        <div id="fifoOutput" class="output"></div>
+
+        <h2>Shortest Job First (SJF)</h2>
+        <div class="input-group">
+            <label for="sjfBurstTimes">Enter Burst Times (comma-separated):</label>
+            <input type="text" id="sjfBurstTimes" placeholder="e.g., 5,8,2,6">
+        </div>
+        <button class="btn" onclick="calculateSJF()">Calculate SJF</button>
+        <div id="sjfOutput" class="output"></div>
+    </div>
+
+    <script>
+        function calculateFIFO() {
+            const input = document.getElementById('fifoBurstTimes').value;
+            const burstTimes = input.split(',').map(Number);
+            let waitingTime = 0;
+            let totalWaitingTime = 0;
+            const results = [];
+
+            burstTimes.forEach((burst, index) => {
+                results.push(`Process ${index + 1}: Waiting Time = ${waitingTime}`);
+                totalWaitingTime += waitingTime;
+                waitingTime += burst;
+            });
+
+            const averageWaitingTime = (totalWaitingTime / burstTimes.length).toFixed(2);
+            results.push(`Average Waiting Time: ${averageWaitingTime}`);
+
+            document.getElementById('fifoOutput').innerHTML = results.join('<br>');
+        }
+
+        function calculateSJF() {
+            const input = document.getElementById('sjfBurstTimes').value;
+            const burstTimes = input.split(',').map(Number);
+            const sortedBurstTimes = [...burstTimes].sort((a, b) => a - b);
+            let waitingTime = 0;
+            let totalWaitingTime = 0;
+            const results = [];
+
+            sortedBurstTimes.forEach((burst, index) => {
+                const processIndex = burstTimes.indexOf(burst);
+                results.push(`Process ${processIndex + 1}: Waiting Time = ${waitingTime}`);
+                totalWaitingTime += waitingTime;
+                waitingTime += burst;
+            });
+
+            const averageWaitingTime = (totalWaitingTime / burstTimes.length).toFixed(2);
+            results.push(`Average Waiting Time: ${averageWaitingTime}`);
+
+            document.getElementById('sjfOutput').innerHTML = results.join('<br>');
+        }
+    </script>
+</body>
+</html>
